@@ -38,32 +38,52 @@ def add_term
   main_menu
 end
 
-def search_term
-  puts "Please enter the word you'd like to search for:"
-  user_input = gets.chomp
-  found_term = Term.search(user_input)
-  puts "Returned entry:"
-  puts "#{found_term[0].word}: #{found_term[0].definition}"
-  puts "\n"
-  main_menu
-end
+#search only works with word as a property. Multi-language support currently breaks search
+# def search_term
+#   puts "Please enter the word you'd like to search for:"
+#   user_input = gets.chomp
+#   found_term = Term.search(user_input)
+#   puts "Returned entry:"
+#   puts "#{found_term[0].word}: #{found_term[0].definitions}"
+#   puts "\n"
+#   main_menu
+# end
 
 def edit_term
   puts "Would you like to add(1) a new definition, change an existing one(2), or return to the main menu(3)?"
   user_input = gets.chomp.to_i
-  if user_input == 2
+  if user_input == 1
     Term.all.each_with_index do |term, index|
-      puts "#{index + 1}. #{term.word}: #{term.definition}"
+      puts "#{index + 1}. #{term.word}"
+    end
+    puts "Enter the number of the word you'd like to give a new definition."
+    user_input = gets.chomp.to_i
+    current_term = Term.all[user_input - 1]
+    puts "Add the definition for #{current_term.word}:"
+    new_definition = gets.chomp
+    current_term.add_definition(new_definition)
+    puts "New definition added to #{current_term.word}."
+    puts "\n"
+    edit_term
+
+  elsif user_input == 2
+    Term.all.each_with_index do |term, index|
+      puts "#{index + 1}. #{term.word}"
     end
       puts "Enter the number of the term you'd like to edit."
       user_input = gets.chomp.to_i
-      puts "Update the definition for #{Term.all[user_input - 1].word}:"
+      current_term = Term.all[user_input - 1]
+      current_term.definitions.each_with_index do |definition, index|
+        puts "#{index + 1}. #{definition}"
+      end
+      puts "Enter the number of the definition you'd like to edit"
+      definition_choice = gets.chomp.to_i
+      puts "Update the definition for #{current_term.definitions[definition_choice - 1]}:"
       updated_definition = gets.chomp
-      Term.all[user_input-1].set_definition(updated_definition)
-      puts "#{Term.all[user_input - 1].word} updated.\n"
+      current_term.definitions[definition_choice - 1] = updated_definition
+      puts "#{current_term.word} updated.\n"
+      puts "\n"
     main_menu
-  elsif user_input == 1
-    some stuff we haven't written and it's lunch time.
   elsif user_input == 3
     main_menu
   else
@@ -74,7 +94,7 @@ end
 
 def delete_term
   Term.all.each_with_index do |term, index|
-    puts "#{index + 1}. #{term.word}: #{term.definition}"
+    puts "#{index + 1}. #{term.word}: #{term.definitions}"
   end
     puts "Enter the number of the term you'd like to delete."
     user_input = gets.chomp.to_i
@@ -85,7 +105,7 @@ end
 
 def list_terms
   Term.all.each do |term|
-    puts "#{term.word}: #{term.definition}"
+    puts "#{term.word}: #{term.definitions.to_s}"
   end
   puts "\n"
   main_menu

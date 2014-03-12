@@ -1,11 +1,11 @@
 class Term
-  attr_reader :word, :definition
+  attr_reader :words, :definitions
 
   @@terms = []
 
   def initialize(word, definition)
-    @word = word
-    @definition = definition
+    @words = [word]
+    @definitions = [definition]
   end
 
   def Term.create(word, definition)
@@ -13,19 +13,31 @@ class Term
     @@terms << new_term
     new_term
   end
-
-  def Term.search(word)
-    @@terms.select do |term|
-      term.word == word
-    end
-  end
+  #search only works with word as a property. Multi-language support currently breaks search
+  # def Term.search(word)
+  #   @@terms.select do |term|
+  #     term.word == word
+  #   end
+  # end
 
   def Term.all
     @@terms
   end
 
-  def set_definition(definition)
-    @definition = definition
+  def add_definition(definition)
+    @definitions << definition
+  end
+
+  def all_definitions
+    @definitions
+  end
+
+  def add_word(word)
+    @words << word
+  end
+
+  def all_words
+    @words
   end
 
   def Term.clear
