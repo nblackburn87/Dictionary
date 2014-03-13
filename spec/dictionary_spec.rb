@@ -21,7 +21,7 @@ describe 'Term' do
 
   describe '.create' do
     it 'creates a new term object in the terms array' do
-      test_term = Term.create('carrot', 'A delicious veggie')
+      test_term = Term.create('carrot', 'A delicious veggie', 'english')
       Term.all.should eq [test_term]
     end
   end
@@ -35,17 +35,19 @@ describe 'Term' do
 
   describe '#add_definition' do
     it 'adds a new definition to the term definitions array' do
-      test_term = Term.create('carrot', 'A boring veggie')
-      test_term.add_definition('an orange item')
-      test_term.all_definitions.should eq ['A boring veggie','an orange item']
+      test_term = Term.create('carrot', 'A boring veggie', 'english')
+      test_term.add_definition('an orange item', 'english')
+      test_term.all_definitions[1].definition.should eq 'an orange item'
+      test_term.all_definitions[1].language.should eq 'english'
     end
   end
 
   describe '#add_word' do
     it 'adds a new word to the term word array' do
-       test_term = Term.create('carrot','A friendly veggie')
-       test_term.add_word('zanahoria')
-       test_term.all_words.should eq ['carrot', 'zanahoria']
+       test_term = Term.create('carrot','A friendly veggie', 'english')
+       test_term.add_word('zanahoria', 'spanish')
+       test_term.all_words[1].word.should eq 'zanahoria'
+       test_term.all_words[1].language.should eq 'spanish'
     end
   end
 end

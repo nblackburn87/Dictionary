@@ -1,3 +1,6 @@
+require './lib/Word'
+require './lib/Definition'
+
 class Term
   attr_reader :words, :definitions
 
@@ -8,11 +11,15 @@ class Term
     @definitions = [definition]
   end
 
-  def Term.create(word, definition)
-    new_term = Term.new(word, definition)
+  def Term.create(word, definition, language)
+    new_word = Word.new(word, language)
+    new_definition = Definition.new(definition, language)
+    new_term = Term.new(new_word, new_definition)
     @@terms << new_term
     new_term
   end
+
+
   #search only works with word as a property. Multi-language support currently breaks search
   # def Term.search(word)
   #   @@terms.select do |term|
@@ -24,16 +31,16 @@ class Term
     @@terms
   end
 
-  def add_definition(definition)
-    @definitions << definition
+  def add_definition(definition, language)
+    @definitions << Definition.new(definition, language)
   end
 
   def all_definitions
     @definitions
   end
 
-  def add_word(word)
-    @words << word
+  def add_word(word, language)
+    @words << Word.new(word, language)
   end
 
   def all_words
